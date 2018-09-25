@@ -11,18 +11,22 @@ import Moya
 import SwiftyJSON
 import Result
 
+//enum APIKEY: String {
+//    
+//}
+
 public class APIHandler: NSObject {
     // MARK: Shared Instance
-    static let sharedInstance: APIHandler = APIHandler()
+    static let shared: APIHandler = APIHandler()
     private override init() {}
-    var serverCodeKey: String = "code"
-    var serverTimeKey: String = "time"
-    var responseDataKey: String = "data"
-    var responseMsgKey: String = "message"
+    private var serverCodeKey: String = "code"
+    private var serverTimeKey: String = "time"
+    private var responseDataKey: String = "data"
+    private var responseMsgKey: String = "message"
     private let networkErrorCode = "0"
-
+    
     func result<T: TargetType>(target: T, result: Result<Moya.Response, MoyaError>,
-                                  completeClosure: ((_ success: Bool, _ content: ResContent<JSON>?, _ error: ResError?) -> Void)?) {
+                               completeClosure: ((_ success: Bool, _ content: ResContent<JSON>?, _ error: ResError?) -> Void)?) {
         
         var content: ResContent<JSON>?
         var error: ResError?
@@ -62,7 +66,7 @@ public class APIHandler: NSObject {
         }
     }
     
-    func handleRequestError(isLoginMode: Bool = false, json: JSON?, statusCode: Int?) -> ResError {
+    func handleRequestError(json: JSON?, statusCode: Int?) -> ResError {
         let statusCode = statusCode ?? 0
         
         guard let json = json else {

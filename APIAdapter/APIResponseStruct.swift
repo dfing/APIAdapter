@@ -24,7 +24,7 @@ struct ResContent<T> {
     var data: T?
     var time: Int
     
-    static func create(for data: T?) -> ResContent {
+    static func createSuccessContent(for data: T?) -> ResContent {
         return ResContent(statusCode: 200, code: "0000", msg: "", data: data, time: Int(Date().timeIntervalSince1970))
     }
 }

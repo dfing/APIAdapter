@@ -21,10 +21,11 @@ enum APIRequestResult<T, NetworkError> {
 } 
 
 typealias API = APIManager
+typealias RequestClosure<T> = ((APIRequestResult<ResContent<T>, ResError>) -> Void)?
 public class APIManager: NSObject {
 	
 	// MARK: Shared Instance
-	static let sharedInstance: APIManager = APIManager()
+	static let shared: APIManager = APIManager()
     private override init() {}
 	
 	private final let alamofireManager: Alamofire.SessionManager = {
@@ -36,9 +37,9 @@ public class APIManager: NSObject {
     // MARK: -
     @discardableResult
     final func request<T: TargetType>(target: T, options: [RequestOption] = [],
-                                       loading: (() -> Void)? = nil,
-                                       updated: ((APIRequestResult<ResContent<JSON>, ResError>) -> Void)? = nil,
-                                       complete: ((APIRequestResult<ResContent<JSON>, ResError>) -> Void)?) -> Cancellable? {
+                                      loading: (() -> Void)? = nil,
+                                      updated: RequestClosure<JSON> = nil,
+                                      complete: RequestClosure<JSON>) -> Cancellable? {
         var first: Bool = true
         let closure: ((_ success: Bool, _ content: ResContent<JSON>?, _ err: ResError?) -> Void)? = { (success, content, error) in
             guard success, let content = content else {
@@ -56,8 +57,8 @@ public class APIManager: NSObject {
     @discardableResult
     final func request<T: TargetType, MO: ModelObject>(_: MO.Type, target: T, options: [RequestOption] = [],
                                                         loading: (() -> Void)? = nil,
-                                                        updated: ((APIRequestResult<ResContent<MO>, ResError>) -> Void)? = nil,
-                                                        complete: ((APIRequestResult<ResContent<MO>, ResError>) -> Void)?) -> Cancellable? {
+                                                        updated: RequestClosure<MO> = nil,
+                                                        complete: RequestClosure<MO>) -> Cancellable? {
         var first: Bool = true
         let closure: ((_ success: Bool, _ content: ResContent<JSON>?, _ err: ResError?) -> Void)? = { (success, content, error) in
             guard success, let content = content, let data = content.data else {
@@ -66,7 +67,7 @@ public class APIManager: NSObject {
                 return
             }
             
-            let model = MO(json: data)!
+            let model = MO(json: data)
             let moContent = ResContent(statusCode: content.statusCode,
                                        code: content.code,
                                        msg: content.msg,
@@ -80,10 +81,10 @@ public class APIManager: NSObject {
     }
     
     @discardableResult
-    final func requestArray<T: TargetType, MO: ModelObject>(_: MO.Type, target: T, options: [RequestOption] = [],
-                                                             loading: (() -> Void)? = nil,
-                                                             updated: ((APIRequestResult<ResContent<[MO]>, ResError>) -> Void)? = nil,
-                                                             complete: ((APIRequestResult<ResContent<[MO]>, ResError>) -> Void)?) -> Cancellable? {
+    final func request<T: TargetType, MO: ModelObject>(_: [MO.Type], target: T, options: [RequestOption] = [],
+                                                       loading: (() -> Void)? = nil,
+                                                       updated: RequestClosure<[MO]> = nil,
+                                                       complete: RequestClosure<[MO]>) -> Cancellable? {
         var first: Bool = true
         let closure: ((_ success: Bool, _ content: ResContent<JSON>?, _ err: ResError?) -> Void)? = { (success, content, error) in
             guard success, let content = content, let data = content.data else {
@@ -91,16 +92,18 @@ public class APIManager: NSObject {
                 first = false
                 return
             }
-            var array: [MO] = []
-            if let data = data.array {
-                data.forEach({ (json) in
-                    array.append(MO(json: json)!)
+            var models: [MO] = []
+            if let array = data.array {
+                array.forEach({ (json) in
+                    if let model = MO(json: json) {
+                        models.append(model)
+                    }
                 })
             }
             let moContent = ResContent(statusCode: content.statusCode,
                                        code: content.code,
                                        msg: content.msg,
-                                       data: array,
+                                       data: models,
                                        time: content.time)
             first ? complete?(.success(moContent)) : updated?(.success(moContent))
             first = false
@@ -116,10 +119,10 @@ extension APIManager {
         
         let key = target.path
         var needShowLoading: Bool = true
-        if options.contains(.cacheFrist), let cacheData: JSON = Cache.sharedInstance.get(key) {
+        if options.contains(.cacheFrist), let cacheData: JSON = Cache.shared.get(key) {
             log.ln("API response data from cache: \(key)")/
             needShowLoading = false
-            completeClosure?(true, ResContent.create(for: cacheData), nil)
+            completeClosure?(true, ResContent.createSuccessContent(for: cacheData), nil)
             if !options.contains(.cacheUpdate) { return nil }
         }
         
@@ -138,11 +141,11 @@ extension APIManager {
                                        plugins: self.createPluginTypes())
         
         return provider.request(target) { result in
-            log.url(target.path)/
-            APIHandler.sharedInstance.result(target: target, result: result) { (success, content, error) in
+            log.url("\(String(describing: target.baseURL)+target.path)")/
+            APIHandler.shared.result(target: target, result: result) { (success, content, error) in
                 completeClosure?(success, content, error)
                 if success, options.contains(.cacheUpdate), let data = content?.data {
-                    Cache.sharedInstance.save(data, key: key)
+                    Cache.shared.save(data, key: key)
                 }
             }
         }

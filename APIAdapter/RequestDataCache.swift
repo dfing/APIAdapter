@@ -15,7 +15,7 @@ enum RequestOption {
 
 typealias Cache = RequestDataCache
 class RequestDataCache: NSObject {
-    static let sharedInstance = RequestDataCache()
+    static let shared = RequestDataCache()
     private override init() {
         cacheBox = [:]
         super.init()
