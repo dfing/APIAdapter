@@ -20,10 +20,13 @@ postfix func / (target: log) {
     switch target {
     case .ln(let line):
         logPrint(emoji: "", line)
+        
     case .url(let url):
         logPrint(emoji: "👻", url)
+        
     case .api(let str):
         logPrint(emoji: "📂", str)
+        
     case .obj(let obj):
         if let obj = obj as? [String: Any] {
             let jsonData = try! JSONSerialization.data(withJSONObject: obj, options: .prettyPrinted)
@@ -33,6 +36,7 @@ postfix func / (target: log) {
         } else {
             logPrint(emoji: "📦", obj)
         }
+        
     case .error(let error):
         if let error = error as? [String: Any] {
             let jsonData = try! JSONSerialization.data(withJSONObject: error, options: .prettyPrinted)
