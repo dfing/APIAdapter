@@ -11,20 +11,16 @@ import Moya
 import SwiftyJSON
 import Result
 
-//enum APIKEY: String {
-//    
-//}
-
 public class APIHandler: NSObject {
     // MARK: Shared Instance
     static let shared: APIHandler = APIHandler()
     private override init() {}
-    private var serverCodeKey: String = "code"
-    private var serverTimeKey: String = "time"
-    private var responseDataKey: String = "data"
-    private var responseMsgKey: String = "message"
-    private let networkErrorCode = "0"
-    
+    private let _serverCodeKey: String = "code"
+    private let _serverTimeKey: String = "time"
+    private let _responseDataKey: String = "data"
+    private let _responseMsgKey: String = "message"
+    private let _networkErrorCode = "0"
+    // MARK: -
     func result<T: TargetType>(target: T, result: Result<Moya.Response, MoyaError>,
                                completeClosure: ((_ success: Bool, _ content: ResContent<JSON>?, _ error: ResError?) -> Void)?) {
         
@@ -42,33 +38,36 @@ public class APIHandler: NSObject {
             completeClosure?(false, nil, error)
             return
         }
+        let requestStatus: Bool
         let json = JSON(response)
         
         switch statusCode {
             
         case 200...299:
-            let code = json[serverCodeKey].string ?? networkErrorCode
-            let message = json[responseMsgKey].string ?? ""
-            let data = json[responseDataKey]
-            let time = json[serverTimeKey].int ?? 0
-            content = ResContent<JSON>(statusCode: statusCode,
-                                           code: code,
-                                           msg: message,
-                                           data: data,
-                                           time: time)
-            completeClosure?(true, content, nil)
-            break
+            requestStatus = true
+            content = self.handleRequestContent(json, statusCode: statusCode)
             
         default:
+            requestStatus = false
             error = self.handleRequestError(json: json, statusCode: statusCode)
-            completeClosure?(false, nil, error)
-            break
         }
+        
+        completeClosure?(requestStatus, content, error)
+    }
+    // MARK: -
+    private func handleRequestContent(_ json: JSON, statusCode: Int) -> ResContent<JSON> {
+        let code = json[_serverCodeKey].string ?? _networkErrorCode
+        let message = json[_responseMsgKey].string ?? ""
+        let data = json[_responseDataKey]
+        let time = json[_serverTimeKey].int ?? Int(Date().timeIntervalSince1970)
+        return ResContent<JSON>(statusCode: statusCode,
+                                code: code,
+                                msg: message,
+                                data: data,
+                                time: time)
     }
     
-    func handleRequestError(json: JSON?, statusCode: Int?) -> ResError {
-        let statusCode = statusCode ?? 0
-        
+    private func handleRequestError(json: JSON?, statusCode: Int) -> ResError {
         guard let json = json else {
             let error = ResError(statusCode: statusCode,
                                  code: "",
@@ -78,11 +77,11 @@ public class APIHandler: NSObject {
             return error
         }
         
-        let serverCode = json[serverCodeKey].string ?? networkErrorCode
-        var errMsg = String(describing: json[responseMsgKey])
+        let serverCode = json[_serverCodeKey].string ?? _networkErrorCode
+        var errMsg = String(describing: json[_responseMsgKey])
         errMsg = self.errorMessage(errMsg, statusCode: statusCode, serverCode: serverCode)
-        let data = json[responseDataKey]
-        let time = json[serverTimeKey].int ?? 0
+        let data = json[_responseDataKey]
+        let time = json[_serverTimeKey].int ?? Int(Date().timeIntervalSince1970)
         let error = ResError(statusCode: statusCode, code: serverCode, msg: errMsg, data: data, time: time)
         return error
     }
