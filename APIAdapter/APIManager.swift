@@ -25,8 +25,16 @@ typealias RequestClosure<T> = ((APIRequestResult<ResContent<T>, ResError>) -> Vo
 public class APIManager: NSObject {
 	
 	// MARK: Shared Instance
+    private(set) var logAllow: Bool = true
 	static let shared: APIManager = APIManager()
     private override init() {}
+    
+    final func logEnable() {
+        self.logAllow = true
+    }
+    final func logDisable() {
+        self.logAllow = false
+    }
 	
 	private final let alamofireManager: Alamofire.SessionManager = {
 		let configuration = URLSessionConfiguration.default
@@ -112,6 +120,7 @@ public class APIManager: NSObject {
     }
 }
 
+// MARK: - Request
 extension APIManager {
     private final func req<T: TargetType>(target: T, options: [RequestOption],
                                            loading: (() -> Void)?,
@@ -207,7 +216,11 @@ struct URLQueryBodyEncoding: Moya.ParameterEncoding {
 }
 
 extension Dictionary {
-    var json: String {
+    func dict2jsonString() -> String {
+        return jsonString
+    }
+    
+    private var jsonString: String {
         let invalidJson = "Not a valid JSON"
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
@@ -215,10 +228,6 @@ extension Dictionary {
         } catch {
             return invalidJson
         }
-    }
-    
-    func dict2json() -> String {
-        return json
     }
 }
 

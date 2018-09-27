@@ -1,5 +1,5 @@
 //
-//  Define.swift
+//  LogDefine.swift
 //  APIAdapter
 //
 //  Created by kayla.wen on 2018/6/22.
@@ -50,6 +50,7 @@ postfix func / (target: log) {
 }
 
 private func logPrint<T>(emoji: String, _ object: T) {
+    guard API.shared.logAllow else { return }
     if emoji.isEmpty {
         debugPrint("\(object)")
     } else {
