@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6523D8EC215D16D000FCD76A /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6523D8EB215D16D000FCD76A /* Promise.swift */; };
 		793D507F20DCA94F00E64C37 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793D507E20DCA94F00E64C37 /* AppDelegate.swift */; };
 		793D508120DCA95000E64C37 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793D508020DCA95000E64C37 /* ViewController.swift */; };
 		793D508420DCA95000E64C37 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 793D508220DCA95000E64C37 /* Main.storyboard */; };
@@ -24,7 +23,9 @@
 
 /* Begin PBXFileReference section */
 		06949B610F86AAD0E1B79D66 /* Pods-APIAdapter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIAdapter.release.xcconfig"; path = "Pods/Target Support Files/Pods-APIAdapter/Pods-APIAdapter.release.xcconfig"; sourceTree = "<group>"; };
-		6523D8EB215D16D000FCD76A /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Promise.swift; sourceTree = "<group>"; };
+		7926B237215DF5390016239F /* Firstly.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Firstly.swift; path = Promise/Firstly.swift; sourceTree = "<group>"; };
+		7926B238215DF5390016239F /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Promise.swift; path = Promise/Promise.swift; sourceTree = "<group>"; };
+		7926B23B215E03A10016239F /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		793D507B20DCA94F00E64C37 /* APIAdapter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APIAdapter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		793D507E20DCA94F00E64C37 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		793D508020DCA95000E64C37 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -38,6 +39,7 @@
 		793D509620DCC2D500E64C37 /* APIHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIHandler.swift; sourceTree = "<group>"; };
 		793D509820DCCCC200E64C37 /* LogDefine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDefine.swift; sourceTree = "<group>"; };
 		793D509A20DCF89400E64C37 /* testdata.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testdata.json; sourceTree = SOURCE_ROOT; };
+		79971596215E09D20059292B /* Box.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Box.swift; path = Promise/Box.swift; sourceTree = "<group>"; };
 		BE03C5C04ECB20115F511258 /* Pods_APIAdapter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_APIAdapter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC4A8B658875DE232EFF4971 /* Pods-APIAdapter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-APIAdapter.debug.xcconfig"; path = "Pods/Target Support Files/Pods-APIAdapter/Pods-APIAdapter.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -71,9 +73,20 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		7926B236215DF5200016239F /* Promise */ = {
+			isa = PBXGroup;
+			children = (
+				7926B238215DF5390016239F /* Promise.swift */,
+				7926B237215DF5390016239F /* Firstly.swift */,
+				79971596215E09D20059292B /* Box.swift */,
+			);
+			name = Promise;
+			sourceTree = "<group>";
+		};
 		793D507220DCA94F00E64C37 = {
 			isa = PBXGroup;
 			children = (
+				7926B23B215E03A10016239F /* MyPlayground.playground */,
 				793D507D20DCA94F00E64C37 /* APIAdapter */,
 				793D507C20DCA94F00E64C37 /* Products */,
 				3A001AF837A83DFC54E742D5 /* Pods */,
@@ -92,9 +105,9 @@
 		793D507D20DCA94F00E64C37 /* APIAdapter */ = {
 			isa = PBXGroup;
 			children = (
+				7926B236215DF5200016239F /* Promise */,
 				793D507E20DCA94F00E64C37 /* AppDelegate.swift */,
 				793D508020DCA95000E64C37 /* ViewController.swift */,
-				6523D8EB215D16D000FCD76A /* Promise.swift */,
 				793D509820DCCCC200E64C37 /* LogDefine.swift */,
 				793D509020DCA97E00E64C37 /* RequestDataCache.swift */,
 				793D509420DCAC6E00E64C37 /* APIResponseStruct.swift */,
@@ -206,6 +219,7 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-APIAdapter/Pods-APIAdapter-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
+				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
@@ -213,6 +227,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
@@ -235,7 +250,6 @@
 				793D507F20DCA94F00E64C37 /* AppDelegate.swift in Sources */,
 				793D509520DCAC6E00E64C37 /* APIResponseStruct.swift in Sources */,
 				793D509920DCCCC200E64C37 /* LogDefine.swift in Sources */,
-				6523D8EC215D16D000FCD76A /* Promise.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
