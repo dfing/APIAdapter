@@ -8,6 +8,11 @@
 
 import UIKit
 import SwiftyJSON
+import PromiseKit
+
+enum MyError: Error {
+    case reject
+}
 
 class ViewController: UIViewController {
 
@@ -15,43 +20,69 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
 //        API.shared.logDisable()
-        delay(5)
-            .then { () -> Promise<String> in
+        delay(1.0)
+            .then { _ in
                 self.fetch()
-            }.success { (result) in
-                debugPrint(result)
+            }.then { (str) -> Promise<String> in
+                debugPrint("fetch 1 > ")
+                debugPrint(str)
+                debugPrint("then")
+                return self.fetch2()
+            }.done { (str) in
+                debugPrint("fetch 2 > ")
+                debugPrint(str)
+                debugPrint("done")
+            }.catch { (error) in
+                debugPrint(error)
         }
-        
+
         debugPrint("123")
-    }
-
-    func fetch() -> Promise<String> {
-        debugPrint("fetch")
-        return Promise<String>({ (resolve, reject) in
-            debugPrint("call api")
-            // Call api
-            API.shared.request([Model.self], target: TestAPI.getdate) { (result) in
-                // callback
-                debugPrint("api callback")
-                switch result {
-                case .success(_):
-                    resolve("ya")
-
-                case .fail(_):
-                    reject(0)
-                }
-            }
-        })
     }
     
     func delay(_ delay: TimeInterval) -> Promise<Void> {
         debugPrint("delay")
-        return Promise<Void>({ (fulfill, reject) in
+        return Promise { seal in
             DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
                 debugPrint("daley after")
-                fulfill(())
+                seal.fulfill(())
             })
-        })
+        }
+    }
+
+    func fetch() -> Promise<String> {
+        debugPrint("fetch 1")
+        return Promise { seal in
+            debugPrint("call api 1")
+            API.shared.request([Model.self], target: TestAPI.getdata) { (result) in
+                // callback
+                debugPrint("api callback 1")
+                switch result {
+                case .success(_):
+                    seal.fulfill("ya 1")
+                    
+                case .fail(_):
+                    seal.reject(MyError.reject)
+                }
+            }
+        }
+    }
+    
+    func fetch2() -> Promise<String> {
+        debugPrint("fetch 2")
+        return Promise { seal in
+            debugPrint("call api 2")
+            API.shared.request([Model.self], target: TestAPI.getdata) { (result) in
+                // callback
+                debugPrint("api callback 2")
+                switch result {
+                case .success(_):
+                    seal.fulfill("ya 2")
+                    
+                case .fail(_):
+                    seal.reject(MyError.reject)
+                }
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -69,7 +100,8 @@ class Model: ModelObject {
 
 import Moya
 enum TestAPI: TargetType {
-    case getdate
+    case getdata
+    case getdata2
 }
 extension TestAPI {
     var baseURL: URL {
@@ -77,7 +109,12 @@ extension TestAPI {
     }
     
     var path: String {
-        return ""
+        switch self {
+        case .getdata:
+            return ""
+        case .getdata2:
+            return "kayla"
+        }
     }
     
     var method: Moya.Method {

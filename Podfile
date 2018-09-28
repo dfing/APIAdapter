@@ -9,5 +9,6 @@ target 'APIAdapter' do
   pod 'Alamofire'
   pod 'Moya', '~> 11.0'
   pod 'SwiftyJSON'
+  pod 'PromiseKit', '~> 6.0'
 
 end
