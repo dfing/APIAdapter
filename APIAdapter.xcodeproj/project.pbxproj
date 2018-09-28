@@ -121,7 +121,6 @@
 				793D507820DCA94F00E64C37 /* Frameworks */,
 				793D507920DCA94F00E64C37 /* Resources */,
 				7E9366D4773BA33EEF6564E2 /* [CP] Embed Pods Frameworks */,
-				BE2C34C32E560446C670C1D4 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -220,21 +219,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-APIAdapter/Pods-APIAdapter-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BE2C34C32E560446C670C1D4 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-APIAdapter/Pods-APIAdapter-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -397,14 +381,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 39U34ZMJBR;
+				DEVELOPMENT_TEAM = JSJ8L744X4;
 				INFOPLIST_FILE = APIAdapter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = kaylawen.APIAdapter;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kayla.APIAdapter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -417,14 +401,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 39U34ZMJBR;
+				DEVELOPMENT_TEAM = JSJ8L744X4;
 				INFOPLIST_FILE = APIAdapter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = kaylawen.APIAdapter;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kayla.APIAdapter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
